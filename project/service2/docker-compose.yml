@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  app1:
+    build: ./service1
+    ports:
+      - "5432:5432"
+    depends_on:
+      - service1_db
+  app2:
+    build: ./service2
+    ports:
+      - "5432:5432"
+    depends_on:
+      - service2_db
+  db1:
+    image: postgres:13.3-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: servies1_db
+    volumes:
+      - postgres-data:/var/lib/postgresql/service1_db
+  db2:
+    image: postgres:13.3-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: service2_db
+    volumes:
+      - postgres-data:/var/lib/postgresql/service2_db
+
+volumes:
+  postgres-data:
